@@ -1,0 +1,114 @@
+﻿@model IQueryable<todo_domain_entities.Models.ToDoItem>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-5">Title</th>
+                        <th class="col-2">Description</th>
+                        <th class="col-3">Due Date</th>
+                        <th class="col-1">Status</th>
+                        <th class="col-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-5">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control title-@item.ID" value="@item.Title">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success update-title" type="button" data-id=@item.ID>Update</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-2">
+                                <button class="btn btn-info btn-description" data-desc="@item.Description">Description</button>
+                            </td>
+                            <td class="col-3">
+                                @(item.DueDate.HasValue ? item.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty)
+                            </td>
+                            <td class="col-1">
+                                @item.Status
+                            </td>
+                            <td class="col-1">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_@item.ID" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_@item.ID">
+                                        <a class="dropdown-item" href="@Url.Action("InProgressToDoItem", "ToDo", new { id = item.ID })">InProgress</a>
+                                        <a class="dropdown-item" href="@Url.Action("CompleteToDoItem", "ToDo", new { id = item.ID })">Complete</a>
+                                        <a class="dropdown-item" href="@Url.Action("CopyToDoItem", "ToDo", new { id = item.ID })">Copy</a>
+                                        <a class="dropdown-item" href="@Url.Action("HideToDoItem", "ToDo", new { id = item.ID })">Hide</a>
+                                        <a class="dropdown-item" href="@Url.Action("RemoveToDoItem", "ToDo", new { id = item.ID })">Remove</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="descModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Description</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".update-title").click(function() {
+                var id = $(this).data("id");
+                var title = $(".title-" + id).val();
+
+                var data = {
+                    id: id,
+                    title: title
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateToDoItemTitle", "ToDo")',
+                    dataType: 'json',
+                    data: data,
+                    success: function(data) {
+                        if (!data.success) {
+                            alert("Error occured. Please try again");
+                        }
+                    },
+                    error: function(ex) {
+                        alert("Error occured. Please try again");
+                        console.log(ex);
+                    }
+                });
+            });
+
+            $(".btn-description").click(function() {
+
+                var description = $(this).data("desc");
+                $(".modal-body").text(description);
+                $('#descModal').modal('show');
+                
+            });
+        });
+    </script>
+}

@@ -1,0 +1,46 @@
+﻿@model IQueryable<todo_domain_entities.Models.ToDoItem>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-6">Title</th>
+                        <th class="col-3">Due Date</th>
+                        <th class="col-2">Status</th>
+                        <th class="col-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-6">
+                                @item.Title
+                            </td>
+                            <td class="col-3">
+                                @(item.DueDate.HasValue ? item.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty)
+                            </td>
+                            <td class="col-2">
+                                @item.Status
+                            </td>
+                            <td class="col-1">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_@item.ID" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_@item.ID">
+                                        <a class="dropdown-item" href="@Url.Action("ShowToDoItem", "ToDo", new { id = item.ID})">Show</a>
+                                        <a class="dropdown-item" href="@Url.Action("RemoveToDoItem", "ToDo", new { id = item.ID, redirectAction = "HiddenToDoItem" })">Remove</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

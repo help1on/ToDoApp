@@ -1,0 +1,29 @@
+﻿@model IQueryable<todo_domain_entities.Models.ToDoItem>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-8">Title</th>
+                        <th class="col-4">Due Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-8">
+                                @item.Title
+                            </td>
+                            <td class="col-4">
+                                @(item.DueDate.HasValue ? item.DueDate.Value.ToString("dd/MM/yyyy HH:mm:ss") : string.Empty)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
