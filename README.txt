@@ -1,0 +1,1 @@
+use command Update-Database in package manager console to be able to run the app
