@@ -104,7 +104,5 @@ namespace ToDoWebApp.Controllers
 
             return View(toDoItems);
         }
-
-
     }
 }

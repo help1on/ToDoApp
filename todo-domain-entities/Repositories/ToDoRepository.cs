@@ -55,6 +55,7 @@ namespace todo_domain_entities.Repositories
                 context.SaveChanges();
             }
         }
+
         public void ShowToDoItem(int id)
         {
             var toDoItem = context.ToDoItems.Where(x => x.ID == id).FirstOrDefault();
@@ -92,7 +93,7 @@ namespace todo_domain_entities.Repositories
         public void CopyToDoItem(int id)
         {
             var toDoItem = context.ToDoItems.Where(x => x.ID == id).FirstOrDefault();
-            if (toDoItem != null )
+            if (toDoItem != null)
             {
                 ToDoItem copyToDoItem = new ToDoItem()
                 {
